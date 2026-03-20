@@ -3,48 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Sash Ventures</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>About | Sash Ventures Strategic Framework</title>
+    <link href="https://cdn.npm.com/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fff; }
-        .about-header { padding: 80px 0; background: #f5f5f7; }
+        :root { --apple-blue: #0071e3; --glass: rgba(255, 255, 255, 0.8); }
+        body { font-family: -apple-system, system-ui, sans-serif; color: #1d1d1f; background-color: #f5f5f7; }
+        .navbar { background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid #d2d2d7; }
+        .navbar-brand { font-weight: 700; letter-spacing: -0.02em; }
+        .about-header { padding: 100px 0 60px; background: #fff; border-bottom: 1px solid #d2d2d7; }
+        .content-card { background: #fff; border-radius: 18px; padding: 45px; margin-top: -40px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .pillar-title { color: var(--apple-blue); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
+        footer { background: #1d1d1f; color: #86868b; padding: 60px 0; margin-top: 80px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">SASH VENTURES</a>
-        </div>
-    </nav>
 
-    <header class="about-header">
-        <div class="container text-center">
-            <h1 class="fw-bold display-4">Our Vision</h1>
-            <p class="lead text-muted">A bridge between technical excellence and market demand.</p>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">SASH VENTURES</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link fw-semibold" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold active text-primary" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="privacy.html">Privacy</a></li>
+            </ul>
         </div>
-    </header>
+    </div>
+</nav>
 
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-8 mx-auto">
-                <h2 class="fw-bold mb-4">Strategic Framework</h2>
-                <p>Founded in 2026, Sash Ventures LLC operates as a centralized hub for digital product development. Our philosophy is rooted in the "Venture Studio" model: we don't just build apps; we build businesses.</p>
-                <p>By leveraging a shared core of design principles and technical infrastructure, we ensure every product under the Sash Ventures umbrella meets the rigorous standards of the Apple App Store and the modern global consumer.</p>
+<header class="about-header text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Strategic Framework</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">Architecting the next generation of digital utility through disciplined engineering and market foresight.</p>
+    </div>
+</header>
+
+<main class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="content-card">
+                <h2 class="fw-bold mb-4">Our Ecosystem Approach</h2>
+                <p class="fs-5 text-secondary">Sash Ventures LLC operates as a specialized venture studio. Our mission is to identify friction in the modern mobile workflow and deploy native-first solutions that prioritize security, speed, and user sovereignty.</p>
                 
-                <h3 class="mt-5 fw-bold">Governance & Integrity</h3>
-                <p>As a registered LLC, we maintain a strict focus on data privacy, ethical software engineering, and transparent corporate governance. This commitment is the foundation of our partnership with global platforms and our growing user base.</p>
+                <hr class="my-5">
+
+                <div class="row g-5">
+                    <div class="col-md-6">
+                        <span class="pillar-title">Infrastructural Integrity</span>
+                        <h4 class="fw-bold mt-2">Native iOS Development</h4>
+                        <p class="text-muted">We maintain a rigorous focus on the Apple ecosystem, utilizing Swift and SwiftUI to ensure our products leverage the full potential of hardware integration and silicon-level security.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="pillar-title">Scalable Content</span>
+                        <h4 class="fw-bold mt-2">Digital Asset Management</h4>
+                        <p class="text-muted">Beyond software, we incubate digital content platforms that serve high-value niche audiences, focusing on information accuracy and seamless cross-platform delivery.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="pillar-title">Capital Strategy</span>
+                        <h4 class="fw-bold mt-2">Venture Incubation</h4>
+                        <p class="text-muted">By centralizing our design, legal, and technical resources, we reduce time-to-market for new ventures, allowing Sash Ventures LLC to pivot rapidly toward emerging market demands.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="pillar-title">Privacy-Centric</span>
+                        <h4 class="fw-bold mt-2">Ethical Data Governance</h4>
+                        <p class="text-muted">We adhere to a "Zero-Knowledge" philosophy. Our products are engineered to minimize data footprints, ensuring that the end-user remains the sole proprietor of their digital information.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</main>
 
-    <footer class="py-4 text-center border-top">
-        <p class="text-muted small">&copy; 2026 Sash Ventures LLC</p>
-    </footer>
-</body>
-</html>    </div>
+<footer class="py-5">
+    <div class="container text-center">
+        <h5 class="text-white mb-4">SASH VENTURES LLC</h5>
+        <div class="mb-4">
+            <a href="index.html" class="mx-3 text-secondary text-decoration-none">Home</a>
+            <a href="privacy.html" class="mx-3 text-secondary text-decoration-none">Privacy Policy</a>
+        </div>
+        <p class="small mb-0">&copy; 2026 Sash Ventures LLC. Registered Entity.</p>
+    </div>
+</footer>
 
-    <footer class="text-center py-4 text-muted border-top bg-white">
-        <p>&copy; 2026 Sash Ventures LLC | Registered Entity</p>
-    </footer>
+<script src="https://cdn.npm.com/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
