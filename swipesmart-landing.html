@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwipeSmart – Max Card Rewards</title>
+  <meta name="description" content="SwipeSmart instantly tells you which credit card to use at checkout so you never miss points, miles, or cash back again.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080c12;
+      --card-bg:   #111820;
+      --accent:    #00c778;
+      --accent-dim:#00c77830;
+      --text:      #ffffff;
+      --muted:     rgba(255,255,255,0.60);
+      --border:    rgba(255,255,255,0.07);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Glow background ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(0,180,100,0.28) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 15% 80%,  rgba(0,140,110,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 90% 10%,  rgba(0,160,120,0.12) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(8,12,18,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-primary svg { width: 20px; height: 20px; }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      transition: border-color .2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+
+    /* ── How it works ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .step {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .step p  { font-size: 14px; color: var(--muted); }
+
+    /* ── Features ── */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 48px;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .feature {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: border-color .2s;
+    }
+    .feature:hover { border-color: rgba(0,199,120,.3); }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+    .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature p  { font-size: 14px; color: var(--muted); }
+
+    /* ── Pricing ── */
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .plan {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+    }
+    .plan.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #0d1f17 0%, var(--card-bg) 100%);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent);
+      color: #000;
+      font-size: 11px; font-weight: 800;
+      padding: 4px 14px; border-radius: 100px;
+      text-transform: uppercase; letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    .plan h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .plan-price {
+      font-size: 36px; font-weight: 800;
+      color: var(--accent);
+      margin: 12px 0 4px;
+    }
+    .plan-price span { font-size: 16px; font-weight: 400; color: var(--muted); }
+    .plan-intro { font-size: 13px; color: var(--accent); margin-bottom: 20px; }
+    .plan ul { list-style: none; }
+    .plan ul li {
+      font-size: 14px; color: var(--muted);
+      padding: 6px 0;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .plan ul li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Section divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a class="nav-logo" href="#">Swipe<span>Smart</span></a>
+  <a class="nav-cta" href="https://apps.apple.com/app/swipesmart/id000000000">Download Free</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">Now available on the App Store</div>
+  <h1>Best card.<br><em>Every time.</em></h1>
+  <p>SwipeSmart instantly tells you which credit card to use at checkout so you never miss points, miles, or cash back again.</p>
+  <div class="hero-buttons">
+    <a class="btn-primary" href="https://apps.apple.com/app/swipesmart/id000000000">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the App Store
+    </a>
+    <a class="btn-secondary" href="#features">See Features</a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- How it works -->
+<section>
+  <div class="section-label">How it works</div>
+  <div class="section-title">Up and running in minutes.</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Add your cards</h3>
+      <p>Enter your credit cards once. SwipeSmart knows the rewards structure for 100+ cards automatically.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>SwipeSmart analyzes</h3>
+      <p>Category bonuses, rotating offers, multipliers, and transfer partners — all calculated instantly.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Pay with the best card</h3>
+      <p>At checkout, open SwipeSmart and see exactly which card earns the most. Done.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Features -->
+<section id="features">
+  <div class="section-label">Features</div>
+  <div class="section-title">Everything you need.<br>Nothing you don't.</div>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>Real-Time Optimization</h3>
+      <p>See which card earns the most for dining, travel, groceries, gas, streaming, and more — instantly.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <h3>Rotating Categories</h3>
+      <p>Never miss a 5x offer. SwipeSmart automatically tracks quarterly rotating categories for Chase Freedom, Discover It, and more.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <h3>Monthly Calculator</h3>
+      <p>Enter your monthly spending and see your total estimated rewards across all cards combined.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔐</div>
+      <h3>Private by Design</h3>
+      <p>All your card data stays on your device. We collect nothing, share nothing, store nothing on our servers.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">✈️</div>
+      <h3>Travel Rewards</h3>
+      <p>Separate flight and hotel optimization with transfer partner support for premium travel cards.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💳</div>
+      <h3>100+ Cards Supported</h3>
+      <p>Chase, Amex, Citi, Capital One, Discover, Bank of America, Wells Fargo, and many more.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Pricing -->
+<section>
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Free to start.<br>Powerful when you upgrade.</div>
+  <div class="pricing">
+    <div class="plan">
+      <h3>Free</h3>
+      <div class="plan-price">$0<span></span></div>
+      <div class="plan-intro">Forever free</div>
+      <ul>
+        <li>Up to 3 credit cards</li>
+        <li>Real-time card optimization</li>
+        <li>Rotating category tracking</li>
+        <li>100+ card templates</li>
+      </ul>
+    </div>
+    <div class="plan featured">
+      <div class="plan-badge">Most Popular</div>
+      <h3>Premium Monthly</h3>
+      <div class="plan-price">$2.99<span>/mo</span></div>
+      <div class="plan-intro">First 6 months at $0.99/mo</div>
+      <ul>
+        <li>Unlimited credit cards</li>
+        <li>Monthly rewards calculator</li>
+        <li>Full category optimization</li>
+        <li>Everything in Free</li>
+      </ul>
+    </div>
+    <div class="plan">
+      <h3>Premium Yearly</h3>
+      <div class="plan-price">$19.99<span>/yr</span></div>
+      <div class="plan-intro">First year at $9.99</div>
+      <ul>
+        <li>Unlimited credit cards</li>
+        <li>Monthly rewards calculator</li>
+        <li>Full category optimization</li>
+        <li>Best value</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom:10px;">
+    <a href="https://apps.apple.com/app/swipesmart/id000000000">Download on the App Store</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.sashventures.com/swipesmart-privacy.html">Privacy Policy</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.sashventures.com">Sash Ventures LLC</a>
+  </p>
+  <p>© 2026 Sash Ventures LLC. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
